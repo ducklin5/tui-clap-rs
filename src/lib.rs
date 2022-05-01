@@ -1,4 +1,4 @@
-use clap::{App, ArgMatches, ErrorKind};
+use clap::{Command, ArgMatches, ErrorKind};
 use crossterm::event::{poll, read, Event, KeyCode};
 use std::borrow::BorrowMut;
 use std::cmp::{max, min};
@@ -235,13 +235,13 @@ pub struct TuiClap<'a> {
     command_output_state: CommandOutputState,
     command_input_widget: CommandInput,
     command_output_widget: CommandOutput,
-    clap: App<'a>
+    clap: Command<'a>
 }
 
 impl TuiClap<'_> {
     /// Creates a `TuiClap` struct from a `clap:App`
     pub fn from_app<'a>(
-        app: App<'a>,
+        app: Command<'a>,
     ) -> TuiClap {
         TuiClap {
             command_input_state: CommandInputState::default(),
@@ -276,7 +276,7 @@ impl TuiClap<'_> {
 
         match matches_result {
             Ok(matches) => Ok(matches),
-            Err(err) => match err.kind {
+            Err(err) => match err.kind() {
                 ErrorKind::DisplayHelp => {
                     let mut buf = Vec::new();
                     let mut writer = Box::new(&mut buf);
